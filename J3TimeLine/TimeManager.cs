@@ -6,6 +6,7 @@ namespace J3TimeLine
     class TimeManager : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public TimeManagerDelegate Delegate = null; //时间改动的时候交给委托处理
         private int secondSinceStart = 0;
         public DateTime startTime;
         public int SecondSinceStart
@@ -20,6 +21,7 @@ namespace J3TimeLine
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SecondSinceStart"));
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TimeFormatted"));
                 }
+                if (this.Delegate != null) this.Delegate.TimeDidChange(value);
             }
         }
 
@@ -34,7 +36,10 @@ namespace J3TimeLine
                 return String.Format("{0,2}:{1,2}", m, s);
             }
         }
+    }
 
-
+    interface TimeManagerDelegate
+    {
+        void TimeDidChange(int secondSinceStart);
     }
 }

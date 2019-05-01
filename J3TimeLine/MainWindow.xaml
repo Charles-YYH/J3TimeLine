@@ -5,23 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:J3TimeLine"
         mc:Ignorable="d"
-        Title="时间轴v1.0肉肉子无敌版" Height="200" Width="300">
+        Title="时间轴v1.0肉肉子无敌版" Height="400" Width="300" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}">
     <Grid Margin="3">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="134*"/>
+            <ColumnDefinition Width="153*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Margin="3">
+        <Grid Margin="3,3,2.6,3" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="00:00" Name="timeLabel"/>
+            <Button Grid.Column="1" Content="请点击监控开始监控战斗开始" Click="startButtonClicked" Name="startButton" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            <Button Grid.Column="2" Content="定位" Click="captureButtonClicked" Name="captureButton" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            <Button Grid.Column="3" Content="监控" Click="monitorButtonClicked" Name="monitorButton" Background="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+        </Grid>
+        <ListBox Grid.Row="1" Margin="3,3,2.6,2.8" Name="lstMessage" Grid.ColumnSpan="2">
+        </ListBox>
+        <Grid Grid.Row="2" Margin="3,3.2,2.6,2.8" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="00:00" Name="timeLabel"/>
-            <Button Grid.Column="1" Content="Start" Click="startButtonClicked" Name="startButton"/>
-            <Button Grid.Column="2" Content="Capture" Click="captureButtonClicked" Name="captureButton"/>
+            <Label Grid.Column="0" Content="X: Y:" Name="positionLabel"/>
         </Grid>
-        <ListBox Grid.Row="1" Margin="3" Name="lstMessage">
-        </ListBox>
+        <Image Grid.Row ="3" Width="100" Name="captureImage" Height="100" Grid.ColumnSpan="2" Margin="94,0.2,93.6,-0.2"/>
+
     </Grid>
 </Window>
