@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 
 namespace J3TimeLine
 {
-    class TimeManager : INotifyPropertyChanged
+    class TimeManager : INotifyPropertyChanged, CaptureManagerDelegate
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public TimeManagerDelegate Delegate = null; //时间改动的时候交给委托处理
         private int secondSinceStart = 0;
         public DateTime startTime;
+        private System.Windows.Threading.DispatcherTimer timer;
+        public ArrayList timelines = new ArrayList();
+
         public int SecondSinceStart
         {
             get { return secondSinceStart; }
@@ -21,7 +24,18 @@ namespace J3TimeLine
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("SecondSinceStart"));
                     this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("TimeFormatted"));
                 }
-                if (this.Delegate != null) this.Delegate.TimeDidChange(value);
+                TimeDidChanged();
+            }
+        }
+
+        private void TimeDidChanged()
+        {
+            foreach(string line in timelines)
+            {
+                int min = Convert.ToInt32(line.Substring(0, 2));
+                int second = Convert.ToInt32(line.Substring(3, 2));
+                Console.WriteLine(min);
+                Console.WriteLine(second);
             }
         }
 
@@ -36,10 +50,29 @@ namespace J3TimeLine
                 return String.Format("{0,2}:{1,2}", m, s);
             }
         }
-    }
 
-    interface TimeManagerDelegate
-    {
-        void TimeDidChange(int secondSinceStart);
+        public void BattelDidStart()
+        {
+            System.Media.SystemSounds.Beep.Play();
+            startTime = DateTime.Now;
+            Console.WriteLine(startTime);
+            timer = new System.Windows.Threading.DispatcherTimer();
+            timer.Tick += new EventHandler(dispatcherTimer_Tick);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 400);
+            timer.Start();
+        }
+
+        public void BattelDidStop()
+        {
+            if (timer != null) timer.Stop();
+            timer = null;
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            DateTime current = DateTime.Now;
+            TimeSpan interval = current - startTime;
+            SecondSinceStart = (int)Math.Truncate(interval.TotalSeconds);
+        }
     }
 }
